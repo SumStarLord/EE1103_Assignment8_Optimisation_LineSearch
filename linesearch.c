@@ -2,13 +2,25 @@
 #include <stdlib.h>
 #include <math.h>
 
+// IT WOULD BE NICE TO SHOW RATE OF CONEVRGENCE - DO IT
+
+
 double f(double x){
     return 2*sin(x) - (x*x)/10;
+}
+
+double f_dash( double x){
+    return 2*cos(x) - x/5;
+}
+
+double f_double_dash(double x){
+    return -2*sin(x) - 0.2;
 }
 
 //returns the x value for maxima.
 double parabolic_interpolation(double (*f)(double x), double x_0, double x_1, double x_2, int num_iter){
     double y_0, y_1, y_2, x_3, y_3;
+    printf("Header - fill it\n");
     for(int i = 0; i<num_iter; i++){
         y_0 = f(x_0);
         y_1 = f(x_1);
@@ -40,7 +52,27 @@ double parabolic_interpolation(double (*f)(double x), double x_0, double x_1, do
     return x_3;
 }
 
+double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_double_dash)(double x), double x, double error_threshold){
+    double x_old, e;
+    int i = 1;
+    x_old = x;
+    e = 100;
+    printf("Header - fill it\n");
+    printf("%d | %lf | %lf | %lf | %lf | %lf\n", i, x, f(x), f_dash(x), f_double_dash(x), e);
+    while(e > error_threshold){
+        x_old = x;
+        x -= f_dash(x)/f_double_dash(x);
+        e = (fabs(x - x_old) / x )*100;
+        i++;
+        printf("%d | %lf | %lf | %lf | %lf | %lf\n", i, x, f(x), f_dash(x), f_double_dash(x), e);
+    }
+    return x;
+}
+
 void main(){
     double result = parabolic_interpolation(&f, 0,1,4,5);
     printf("x_max = %lf\ny_max = %lf\n", result, f(result));
+
+    double result2 = newton(&f, &f_dash, &f_double_dash, 2.5, 1);
+    printf("x_max = %lf\ny_max = %lf\n", result2, f(result2));
 }
