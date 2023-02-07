@@ -6,15 +6,15 @@
 
 
 double f(double x){
-    return 2*sin(x) - (x*x)/10;
+    return x*x*x*x;
 }
 
 double f_dash( double x){
-    return 2*cos(x) - x/5;
+    return 4*x*x*x;
 }
 
 double f_double_dash(double x){
-    return -2*sin(x) - 0.2;
+    return 12*x*x;
 }
 
 //returns the x value for maxima.
@@ -32,7 +32,7 @@ double parabolic_interpolation(double (*f)(double x), double x_0, double x_1, do
         //for debugging
         printf("%d | %lf | %lf | %lf | %lf | %lf | %lf | %lf | %lf\n", i+1, x_0, y_0, x_1, y_1, x_2, y_2, x_3, y_3);
 
-        //updating for next iter
+        //updating for next iter - check this
         if(y_1 > y_3){
             if(x_1 < x_3){
                 x_2 = x_3;
@@ -70,9 +70,9 @@ double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_doub
 }
 
 void main(){
-    double result = parabolic_interpolation(&f, 0,1,4,5);
-    printf("x_max = %lf\ny_max = %lf\n", result, f(result));
+    //double result = parabolic_interpolation(&f, 0,1,4,100);
+    //printf("x_max = %lf\ny_max = %lf\n", result, f(result));
 
-    double result2 = newton(&f, &f_dash, &f_double_dash, 2.5, 1);
+    double result2 = newton(&f, &f_dash, &f_double_dash, 0.9, 1);
     printf("x_max = %lf\ny_max = %lf\n", result2, f(result2));
 }
