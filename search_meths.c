@@ -18,15 +18,12 @@ double golden(double a, double b, double e, double (*func)(double x))
     {
         if (func(x1)>func(x2))
         {
-           
             xopt = x1;
             error = (1-R)*fabs((xu-xl)/xopt);
             xl = x2;
             x2 = x1;
             d = R*(xu - xl);
             x1 = xl + d;
-            
-           
         }
         else if (func(x1)<func(x2))
         {
@@ -36,15 +33,11 @@ double golden(double a, double b, double e, double (*func)(double x))
             x1 = x2;
             d = R*(xu - xl);
             x2 = xu - d;
-            
-           
         }
-        
            if(error<e)
            {
              exite = true;
-           }
-           
+           } 
     }
     return xopt;
     
@@ -69,19 +62,16 @@ double twobythree(double a, double b, double e, double (*func)(double x))
     {
         if (func(x1)>func(x2))
         {
-           
             xopt = x1;
             error = (1-R)*fabs((xu-xl)/xopt);
             xl = x2;
            
             d = R*(xu - xl);
             x1 = xl + d;
-            x2 = xu - d;
-           
+            x2 = xu - d; 
         }
         else
         {
-            
             xopt = x2;
             
             error = (1-R)*fabs((xu-xl)/xopt);
@@ -89,20 +79,16 @@ double twobythree(double a, double b, double e, double (*func)(double x))
             
             d = R*(xu - xl);
             x1 = xl + d;
-            x2 = xu - d;
-            
-           
+            x2 = xu - d;  
         }
-        
            if(error<e)
            {
              exite = true;
-           }
-           
+           }      
     }
-    return xopt;
-    
+    return xopt; 
 }
+
 double f (double x)
 {
     return (-x*x + 5*x -6);
