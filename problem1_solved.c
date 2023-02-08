@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -47,7 +48,7 @@ double golden(double a, double b, double e, double (*func)(double x))
     printf("i |       x_opt       |          e        \n"); 
     while(exite == false)
     {
-        if (func(x1)>func(x2))
+        if (func(x1)>func(x2))      //performing the check to understand which section of the interval to take followed by performing the necessary updates
         {
             xopt = x1;
             error = (1-R)*fabs((xu-xl)/xopt);
@@ -95,7 +96,7 @@ double twobythree(double a, double b, double e, double (*func)(double x))
     printf("i |       x_opt       |          e        \n"); 
     while(exite == false)
     {
-        if (func(x1)>func(x2))
+        if (func(x1)>func(x2))      //performing the check to understand which section of the interval to take followed by performing the necessary updates
         {
             xopt = x1;
             error = (1-R)*fabs((xu-xl)/xopt);
