@@ -7,6 +7,10 @@
 
 
 double f(double x){
+    return x*x*x*x;
+}
+
+double minus_f(double x){
     return -x*x*x*x;
 }
 
@@ -22,12 +26,16 @@ double g(double x){
     return sqrt(1 + x*x);
 }
 
+double minus_g(double x){
+    return -sqrt(1 + x*x);
+}
+
 double g_dash( double x){
     return x / sqrt(1 + x*x);
 }
 
 double g_double_dash(double x){
-    return (sqrt(1 + x*x) + (x*x)/sqrt(1 + x*x)) / (1 + x*x);
+    return (sqrt(1 + x*x) - (x*x)/sqrt(1 + x*x)) / (1 + x*x);
 }
 
 //returns the x value for maxima.
@@ -73,16 +81,17 @@ double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_doub
     e = 100;
     printf("i |          x        |        f(x)       |       f'(x)       |      f''(x)       |          e        \n");
     printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i, x, f(x), f_dash(x), f_double_dash(x), e);
-    while(e > error_threshold){
+    while(fabs(e) > error_threshold){
         x_old = x;
         x -= f_dash(x)/f_double_dash(x);
-        e = (fabs(x - x_old) / x )*100;
+        e = (fabs(x - x_old) / (x+0.1) )*100;
         i++;
         printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i, x, f(x), f_dash(x), f_double_dash(x), e);
     }
     return x;
 }
 
+//gives maxima
 double golden(double a, double b, double e, double (*func)(double x))
 {
     double xl, xu,x1,x2,xopt;
@@ -123,6 +132,8 @@ double golden(double a, double b, double e, double (*func)(double x))
     return xopt;
     
 }
+
+//gives maxima
 double twobythree(double a, double b, double e, double (*func)(double x))
 {
     double xl, xu,x1,x2,xopt;
@@ -173,17 +184,29 @@ double twobythree(double a, double b, double e, double (*func)(double x))
 void main(){
     // for x^4
 
-    //double result = parabolic_interpolation(&f, 0,1,4,100);
-    //printf("x_max = %.15lf\ny_max = %.15lf\n", result, f(result));
+    printf("\n\nOptimisation of f(x) = -x^4 using parabolic interpolation:\n\n");
+    double result = parabolic_interpolation(&minus_f, -2,1,5,4);
+    printf("x_max = %.15lf\ny_max = %.15lf\n", result, f(result));
 
-    //double result2 = newton(&f, &f_dash, &f_double_dash, 1.1, 1);
-    //printf("x_max = %.15lf\ny_max = %.15lf\n", result2, f(result2));
+    printf("\n\nOptimisation of f(x) = x^4 using newton's method [initial point = 0.9]:\n\n");
+    double result2 = newton(&f, &f_dash, &f_double_dash, 0.9, 1);
+    printf("x_min = %.15lf\ny_min = %.15lf\n", result2, f(result2));
+
+    printf("\n\nOptimisation of f(x) = x^4 using newton's method [initial point = 1.1]:\n\n");
+    double result3 = newton(&f, &f_dash, &f_double_dash, 1.1, 1);
+    printf("x_min = %.15lf\ny_min = %.15lf\n", result3, f(result3));
 
     //for  sqrt(1 + x^2)
 
-    //double result = parabolic_interpolation(&g, -1,1,4,100);
-    //printf("x_max = %.15lf\ny_max = %.15lf\n", result, g(result));
+    printf("\n\nOptimisation of g(x) = -sqrt(1+x^2) using parabolic interpolation:\n\n");
+    double result4 = parabolic_interpolation(&minus_g, -1,1,4,4 );
+    printf("x_max = %.15lf\ny_max = %.15lf\n", result4, g(result4));
 
-    double result2 = newton(&g, &g_dash, &g_double_dash, 0.9, 1);
-    printf("x_max = %.15lf\ny_max = %.15lf\n", result2, g(result2));
+    printf("\n\nOptimisation of g(x) = sqrt(1+x^2) using newton's method [initial point = 0.9]:\n\n");
+    double result5 = newton(&g, &g_dash, &g_double_dash, 0.9, 1);
+    printf("x_min = %.15lf\ny_min = %.15lf\n", result5, g(result5));
+
+    printf("\n\nOptimisation of g(x) = sqrt(1+x^2) using newton's method [initial point = 1.1]:\n\n");
+    double result6 = newton(&g, &g_dash, &g_double_dash, 1.1, 1);
+    printf("x_min = %.15lf\ny_min = %.15lf\n", result6, g(result6));
 }
