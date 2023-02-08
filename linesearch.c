@@ -96,7 +96,7 @@ double parabolic_interpolation_sequential(double (*f)(double x), double x_0, dou
     return x_3;
 }
 
-//returns the minima
+//returns the extrema
 double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_double_dash)(double x), double x, double error_threshold){
     double x_old, e;
     int i = 1;
@@ -139,7 +139,7 @@ double golden(double a, double b, double e, double (*func)(double x))
             d = R*(xu - xl);
             x1 = xl + d;
         }
-        else if (func(x1)<func(x2))
+        else
         {
             xopt = x2;
             error = (1-R)*fabs((xu-xl)/xopt);
@@ -171,10 +171,11 @@ double twobythree(double a, double b, double e, double (*func)(double x))
     x1 = xl + d;
     
     x2 = xu - d;
-   
+    int i = 0;
     bool exite = false;
     
     double error;
+    printf("i |       x_opt       |          e        \n"); 
     while(exite == false)
     {
         if (func(x1)>func(x2))
@@ -201,7 +202,9 @@ double twobythree(double a, double b, double e, double (*func)(double x))
            if(error<e)
            {
              exite = true;
-           }      
+           }
+        i++;
+        printf("%d | %.15lf | %.15lf \n", i, xopt, error);      
     }
     return xopt; 
 }
@@ -228,9 +231,9 @@ void main(){
 
     //for  sqrt(1 + x^2)
 
-    // printf("\n\nOptimisation of f(x) = -sqrt(1+x^2) using golden search method:\n\n");
-    // double result7 = golden(-1, 2, 1, &minus_g);
-    // printf("x_max = %.15lf\ny_max = %.15lf\n", result7, f(result7));
+    printf("\n\nOptimisation of f(x) = -sqrt(1+x^2) using golden search method:\n\n");
+    double result7 = golden(-4, 2, 1, &minus_g);
+    printf("x_max = %.15lf\ny_max = %.15lf\n", result7, g(result7));
 
     printf("\n\nOptimisation of g(x) = -sqrt(1+x^2) using parabolic interpolation:\n\n");
     double result4 = parabolic_interpolation_sequential(&minus_g, -1,1,4,8 );
@@ -244,3 +247,9 @@ void main(){
     double result6 = newton(&g, &g_dash, &g_double_dash, 1.1, 1);
     printf("x_min = %.15lf\ny_min = %.15lf\n", result6, g(result6));
 }
+
+//mention that it oscialtes when x_0 = 1 for sqrt(...) newton method and why it diverges for x_0 = 1.1
+
+//explain how we take error for newton and what will happen when we dont do that.
+
+//comment the code
