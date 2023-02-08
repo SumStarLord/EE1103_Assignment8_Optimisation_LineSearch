@@ -31,7 +31,7 @@ double g_double_dash(double x){
     return (sqrt(1 + x*x) + (x*x)/sqrt(1 + x*x)) / (1 + x*x);
 }*/
 
-
+//returns the x value for maxima.
 //gives maxima
 double golden(double a, double b, double e, double (*func)(double x))
 {
@@ -48,7 +48,7 @@ double golden(double a, double b, double e, double (*func)(double x))
     printf("i |       x_opt       |          e        \n"); 
     while(exite == false)
     {
-        if (func(x1)>func(x2))
+        if (func(x1)>func(x2))  //performing the check to understand which section of the interval to take followed by performing the necessary updates
         {
             xopt = x1;
             error = (1-R)*fabs((xu-xl)/xopt);
@@ -57,8 +57,8 @@ double golden(double a, double b, double e, double (*func)(double x))
             d = R*(xu - xl);
             x1 = xl + d;
         }
-        else if (func(x1)<func(x2))
-        {
+        else
+        {    //performing the check to understand which section of the interval to take followed by performing the necessary updates
             xopt = x2;
             error = (1-R)*fabs((xu-xl)/xopt);
             xu = x1;
@@ -185,7 +185,7 @@ double parabolic_interpolation_sequential(double (*f)(double x), double x_0, dou
     return x_3;
 }
 
-//returns the minima
+//returns the extrema
 double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_double_dash)(double x), double x, double error_threshold){
     double x_old, e;
     int i = 1;
@@ -203,7 +203,6 @@ double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_doub
     return x;
 }
 
-//returns the x value for maxima.
 void main(){
     double z = golden(0.0,60.00,0.01,f);
     printf("Optima obtained by Golden-section search %f, with max height being %f\n",z,f(z));

@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -32,7 +31,6 @@ double g_double_dash(double x){
 }*/
 
 //returns the x value for maxima.
-
 //gives maxima
 double golden(double a, double b, double e, double (*func)(double x))
 {
@@ -58,7 +56,7 @@ double golden(double a, double b, double e, double (*func)(double x))
             d = R*(xu - xl);
             x1 = xl + d;
         }
-        else if (func(x1)<func(x2))
+        else
         {
             xopt = x2;
             error = (1-R)*fabs((xu-xl)/xopt);
@@ -186,7 +184,7 @@ double parabolic_interpolation_sequential(double (*f)(double x), double x_0, dou
     return x_3;
 }
 
-//returns the minima
+//returns the extrema
 double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_double_dash)(double x), double x, double error_threshold){
     double x_old, e;
     int i = 1;
@@ -216,3 +214,5 @@ void main(){
     printf("Optima obtained by Newton's method %f",z);
     
 }
+
+
