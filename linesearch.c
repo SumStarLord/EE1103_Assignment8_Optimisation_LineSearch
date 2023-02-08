@@ -39,9 +39,9 @@ double g_double_dash(double x){
 }
 
 //returns the x value for maxima.
-double parabolic_interpolation(double (*f)(double x), double x_0, double x_1, double x_2, int num_iter){
+double parabolic_interpolation_bracketing_approach(double (*f)(double x), double x_0, double x_1, double x_2, int num_iter){
     double y_0, y_1, y_2, x_3, y_3;
-    printf("Header - fill it\n");
+    printf("i |          x_0      |       f(x_0)      |        x_1        |      f(x_1)       |        x_2        |      f(x_2)       |        x_3        |      f(x_3)       \n");
     for(int i = 0; i<num_iter; i++){
         y_0 = f(x_0);
         y_1 = f(x_1);
@@ -69,6 +69,29 @@ double parabolic_interpolation(double (*f)(double x), double x_0, double x_1, do
                 x_1 = x_3;
             }
         }
+    }
+    return x_3;
+}
+
+//returns the maxima
+double parabolic_interpolation_sequential(double (*f)(double x), double x_0, double x_1, double x_2, int num_iter){
+    double y_0, y_1, y_2, x_3, y_3;
+    printf("i |          x_0      |       f(x_0)      |        x_1        |      f(x_1)       |        x_2        |      f(x_2)       |        x_3        |      f(x_3)       \n");
+    for(int i = 0; i<num_iter; i++){
+        y_0 = f(x_0);
+        y_1 = f(x_1);
+        y_2 = f(x_2);
+        
+        x_3 = ((y_0 * (x_1*x_1 - x_2*x_2)) + (y_1 * (x_2*x_2 - x_0*x_0)) + (y_2 * (x_0*x_0 - x_1*x_1))) / ((2*y_0*(x_1 - x_2)) + (2*y_1*(x_2 - x_0)) + (2*y_2*(x_0 - x_1)));
+        y_3 = f(x_3);
+
+        //for debugging
+        printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i+1, x_0, y_0, x_1, y_1, x_2, y_2, x_3, y_3);
+
+        //updating for next iter
+        x_0 = x_1;
+        x_1 = x_2;
+        x_2 = x_3;
     }
     return x_3;
 }
@@ -185,7 +208,7 @@ void main(){
     // for x^4
 
     printf("\n\nOptimisation of f(x) = -x^4 using parabolic interpolation:\n\n");
-    double result = parabolic_interpolation(&minus_f, -2,1,5,4);
+    double result = parabolic_interpolation_sequential(&minus_f, -2,1,5,4);
     printf("x_max = %.15lf\ny_max = %.15lf\n", result, f(result));
 
     printf("\n\nOptimisation of f(x) = x^4 using newton's method [initial point = 0.9]:\n\n");
@@ -199,7 +222,7 @@ void main(){
     //for  sqrt(1 + x^2)
 
     printf("\n\nOptimisation of g(x) = -sqrt(1+x^2) using parabolic interpolation:\n\n");
-    double result4 = parabolic_interpolation(&minus_g, -1,1,4,4 );
+    double result4 = parabolic_interpolation_sequential(&minus_g, -1,1,4,4 );
     printf("x_max = %.15lf\ny_max = %.15lf\n", result4, g(result4));
 
     printf("\n\nOptimisation of g(x) = sqrt(1+x^2) using newton's method [initial point = 0.9]:\n\n");

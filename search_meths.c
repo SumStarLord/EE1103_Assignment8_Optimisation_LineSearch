@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 
+//return the maxima
 double golden(double a, double b, double e, double (*func)(double x))
 {
     double xl, xu,x1,x2,xopt;
@@ -42,6 +43,8 @@ double golden(double a, double b, double e, double (*func)(double x))
     return xopt;
     
 }
+
+//return the maxima
 double twobythree(double a, double b, double e, double (*func)(double x))
 {
     double xl, xu,x1,x2,xopt;
@@ -89,13 +92,78 @@ double twobythree(double a, double b, double e, double (*func)(double x))
     return xopt; 
 }
 
-double f (double x)
-{
-    return (-x*x + 5*x -6);
+//returns the maxima.
+double parabolic_interpolation_bracketing_approach(double (*f)(double x), double x_0, double x_1, double x_2, int num_iter){
+    double y_0, y_1, y_2, x_3, y_3;
+    printf("i |          x_0      |       f(x_0)      |        x_1        |      f(x_1)       |        x_2        |      f(x_2)       |        x_3        |      f(x_3)       \n");
+    for(int i = 0; i<num_iter; i++){
+        y_0 = f(x_0);
+        y_1 = f(x_1);
+        y_2 = f(x_2);
+        
+        x_3 = ((y_0 * (x_1*x_1 - x_2*x_2)) + (y_1 * (x_2*x_2 - x_0*x_0)) + (y_2 * (x_0*x_0 - x_1*x_1))) / ((2*y_0*(x_1 - x_2)) + (2*y_1*(x_2 - x_0)) + (2*y_2*(x_0 - x_1)));
+        y_3 = f(x_3);
+
+        //for debugging
+        printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i+1, x_0, y_0, x_1, y_1, x_2, y_2, x_3, y_3);
+
+        //updating for next iter
+        if(y_1 > y_3){
+            if(x_1 < x_3){
+                x_2 = x_3;
+            } else {
+                x_0 = x_3;
+            }
+        } else {
+            if(x_1 < x_3){
+                x_0 = x_1;
+                x_1 = x_3;
+            } else {
+                x_2 = x_1;
+                x_1 = x_3;
+            }
+        }
+    }
+    return x_3;
 }
 
-void main()
-{
-    double c = twobythree(-4.0,5.0,0.001,f);
-    printf("%f",c);
+//return the maxima
+double parabolic_interpolation_sequential(double (*f)(double x), double x_0, double x_1, double x_2, int num_iter){
+    double y_0, y_1, y_2, x_3, y_3;
+    printf("i |          x_0      |       f(x_0)      |        x_1        |      f(x_1)       |        x_2        |      f(x_2)       |        x_3        |      f(x_3)       \n");
+    for(int i = 0; i<num_iter; i++){
+        y_0 = f(x_0);
+        y_1 = f(x_1);
+        y_2 = f(x_2);
+        
+        x_3 = ((y_0 * (x_1*x_1 - x_2*x_2)) + (y_1 * (x_2*x_2 - x_0*x_0)) + (y_2 * (x_0*x_0 - x_1*x_1))) / ((2*y_0*(x_1 - x_2)) + (2*y_1*(x_2 - x_0)) + (2*y_2*(x_0 - x_1)));
+        y_3 = f(x_3);
+
+        //for debugging
+        printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i+1, x_0, y_0, x_1, y_1, x_2, y_2, x_3, y_3);
+
+        //updating for next iter
+        x_0 = x_1;
+        x_1 = x_2;
+        x_2 = x_3;
+    }
+    return x_3;
+}
+
+//returns the minima
+double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_double_dash)(double x), double x, double error_threshold){
+    double x_old, e;
+    int i = 1;
+    x_old = x;
+    e = 100;
+    printf("i |          x        |        f(x)       |       f'(x)       |      f''(x)       |          e        \n");
+    printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i, x, f(x), f_dash(x), f_double_dash(x), e);
+    while(fabs(e) > error_threshold){
+        x_old = x;
+        x -= f_dash(x)/f_double_dash(x);
+        e = (fabs(x - x_old) / (x+0.1) )*100;
+        i++;
+        printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i, x, f(x), f_dash(x), f_double_dash(x), e);
+    }
+    return x;
 }
