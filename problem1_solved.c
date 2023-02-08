@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -31,9 +32,6 @@ double g_double_dash(double x){
 }*/
 
 //returns the x value for maxima.
-#include <stdio.h>
-#include <stdbool.h>
-#include <math.h>
 
 //gives maxima
 double golden(double a, double b, double e, double (*func)(double x))

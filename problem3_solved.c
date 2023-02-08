@@ -31,10 +31,6 @@ double g_double_dash(double x){
     return (sqrt(1 + x*x) + (x*x)/sqrt(1 + x*x)) / (1 + x*x);
 }*/
 
-//returns the x value for maxima.
-#include <stdio.h>
-#include <stdbool.h>
-#include <math.h>
 
 //gives maxima
 double golden(double a, double b, double e, double (*func)(double x))
@@ -207,7 +203,7 @@ double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_doub
     return x;
 }
 
-
+//returns the x value for maxima.
 void main(){
     double z = golden(0.0,60.00,0.01,f);
     printf("Optima obtained by Golden-section search %f, with max height being %f\n",z,f(z));
