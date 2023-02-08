@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-//return the maxima
+//gives maxima
 double golden(double a, double b, double e, double (*func)(double x))
 {
     double xl, xu,x1,x2,xopt;
@@ -13,8 +13,9 @@ double golden(double a, double b, double e, double (*func)(double x))
     x1 = xl + d;
     x2 = xu - d;
     bool exite = false;
-    
+    int i = 0;
     double error;
+    printf("i |       x_opt       |          e        \n"); 
     while(exite == false)
     {
         if (func(x1)>func(x2))
@@ -38,10 +39,11 @@ double golden(double a, double b, double e, double (*func)(double x))
            if(error<e)
            {
              exite = true;
-           } 
+           }
+        i++;
+        printf("%d | %.15lf | %.15lf \n", i, xopt, error);
     }
-    return xopt;
-    
+    return xopt;   
 }
 
 //return the maxima
@@ -161,7 +163,7 @@ double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_doub
     while(fabs(e) > error_threshold){
         x_old = x;
         x -= f_dash(x)/f_double_dash(x);
-        e = (fabs(x - x_old) / (x+0.1) )*100;
+        e = (fabs(x - x_old) / (x) )*100;
         i++;
         printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i, x, f(x), f_dash(x), f_double_dash(x), e);
     }

@@ -107,7 +107,7 @@ double newton(double (*f)(double x), double (*f_dash)(double x), double (*f_doub
     while(fabs(e) > error_threshold){
         x_old = x;
         x -= f_dash(x)/f_double_dash(x);
-        e = (fabs(x - x_old) / (x+0.1) )*100;
+        e = (fabs(x - x_old) / (x+0.01) )*100;
         i++;
         printf("%d | %.15lf | %.15lf | %.15lf | %.15lf | %.15lf\n", i, x, f(x), f_dash(x), f_double_dash(x), e);
     }
@@ -125,8 +125,9 @@ double golden(double a, double b, double e, double (*func)(double x))
     x1 = xl + d;
     x2 = xu - d;
     bool exite = false;
-    
+    int i = 0;
     double error;
+    printf("i |       x_opt       |          e        \n"); 
     while(exite == false)
     {
         if (func(x1)>func(x2))
@@ -150,10 +151,11 @@ double golden(double a, double b, double e, double (*func)(double x))
            if(error<e)
            {
              exite = true;
-           } 
+           }
+        i++;
+        printf("%d | %.15lf | %.15lf \n", i, xopt, error);
     }
-    return xopt;
-    
+    return xopt;   
 }
 
 //gives maxima
@@ -205,10 +207,15 @@ double twobythree(double a, double b, double e, double (*func)(double x))
 }
 
 void main(){
+
     // for x^4
+    
+    printf("\n\nOptimisation of f(x) = -x^4 using golden search method:\n\n");
+    double result0 = golden(-1, 2, 1, &minus_f);
+    printf("x_max = %.15lf\ny_max = %.15lf\n", result0, f(result0));
 
     printf("\n\nOptimisation of f(x) = -x^4 using parabolic interpolation:\n\n");
-    double result = parabolic_interpolation_sequential(&minus_f, -2,1,5,4);
+    double result = parabolic_interpolation_sequential(&minus_f, -2,1,5,8);
     printf("x_max = %.15lf\ny_max = %.15lf\n", result, f(result));
 
     printf("\n\nOptimisation of f(x) = x^4 using newton's method [initial point = 0.9]:\n\n");
@@ -221,8 +228,12 @@ void main(){
 
     //for  sqrt(1 + x^2)
 
+    // printf("\n\nOptimisation of f(x) = -sqrt(1+x^2) using golden search method:\n\n");
+    // double result7 = golden(-1, 2, 1, &minus_g);
+    // printf("x_max = %.15lf\ny_max = %.15lf\n", result7, f(result7));
+
     printf("\n\nOptimisation of g(x) = -sqrt(1+x^2) using parabolic interpolation:\n\n");
-    double result4 = parabolic_interpolation_sequential(&minus_g, -1,1,4,4 );
+    double result4 = parabolic_interpolation_sequential(&minus_g, -1,1,4,8 );
     printf("x_max = %.15lf\ny_max = %.15lf\n", result4, g(result4));
 
     printf("\n\nOptimisation of g(x) = sqrt(1+x^2) using newton's method [initial point = 0.9]:\n\n");
