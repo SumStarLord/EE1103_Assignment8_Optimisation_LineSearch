@@ -59,10 +59,11 @@ double twobythree(double a, double b, double e, double (*func)(double x))
     x1 = xl + d;
     
     x2 = xu - d;
-   
+    int i = 0;
     bool exite = false;
     
     double error;
+    printf("i |       x_opt       |          e        \n"); 
     while(exite == false)
     {
         if (func(x1)>func(x2))
@@ -89,7 +90,9 @@ double twobythree(double a, double b, double e, double (*func)(double x))
            if(error<e)
            {
              exite = true;
-           }      
+           }
+        i++;
+        printf("%d | %.15lf | %.15lf \n", i, xopt, error);      
     }
     return xopt; 
 }
